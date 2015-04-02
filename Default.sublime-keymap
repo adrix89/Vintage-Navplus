@@ -44,22 +44,15 @@
   {
     "keys": ["g","e"],
     "command": "move_to_regex",
-    // "args": {"end": false,"expand":false},
+    "args": {
+    //   "regex":" " ,
+    //   "expand":true,
+    //   "visual":false
+    },
     "context": [
       {"key": "setting.command_mode"},
     ]
   },
-  { "keys": ["["], "command": "vi_scroll_lines",
-    "args": {"forward": false},
-    "context": [{"key": "setting.command_mode"}]
-  },
-
-  { "keys": ["]"], "command": "vi_scroll_lines",
-    "args": {"forward": true},
-    "context": [{"key": "setting.command_mode"}]
-  },
-  { "keys": ["."], "command": "last_com",
-    "context": [{"key": "setting.command_mode"}]
-  },
+ 
 
 ]
