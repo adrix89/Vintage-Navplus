@@ -34,7 +34,7 @@ class move_to_regex(sublime_plugin.TextCommand):
 
 
 class move_to_indent(sublime_plugin.TextCommand):
-	def run(self, edit,mode="inside",visual=False):
+	def run(self, edit,mode="inside",visual=False,r_range=30):
 		v = self.view
 		tab_width = v.settings().get("tab_size")
 		sels =  v.sel()
@@ -51,11 +51,12 @@ class move_to_indent(sublime_plugin.TextCommand):
 		row,col = v.rowcol(region.begin())
 		end_row = v.rowcol(v.size())[0]
 		last_region = False
+		row_range = r_range
 		if mode=="inside":
 			if region.end() > sel.b:
 				done = True
 			else:
-				for i in range(row+1,min( row+200,end_row+1)):
+				for i in range(row+1,min( row+row_range,end_row+1)):
 					region = v.find("^[\t ]*", v.text_point(i,0))
 					indent2 = region.size()+ v.substr(region).count('\t')*(tab_width-1)
 					if indent<indent2:
@@ -67,14 +68,14 @@ class move_to_indent(sublime_plugin.TextCommand):
 			if region.end() < sel.b:
 				done = True
 			else:
-				for i in range(row,max(row-200,0),-1 ):
+				for i in range(row,max(row-row_range,0),-1 ):
 					region = v.find("^[\t ]*", v.text_point(i-1,0))
 					indent2 = region.size()+ v.substr(region).count('\t')*(tab_width-1)
 					if indent>indent2 and v.line(region):
 						done = True
 						break
 		elif mode=="forward":
-			for i in range(row+1,min(row+200,end_row+1)):
+			for i in range(row+1,min(row+row_range,end_row+1)):
 				region = v.find("^[\t ]*", v.text_point(i,0))
 				indent2 = region.size()+ v.substr(region).count('\t')*(tab_width-1)
 				if indent2!=indent or not v.line(region) :
@@ -89,7 +90,7 @@ class move_to_indent(sublime_plugin.TextCommand):
 				elif indent==indent2 and not change:
 					last_region = region
 		elif mode=="backward":
-			for i in range(row,max(row-200,0),-1):
+			for i in range(row,max(row-row_range,0),-1):
 				region = v.find("^[\t ]*", v.text_point(i-1,0))
 				indent2 = region.size()+ v.substr(region).count('\t')*(tab_width-1)
 				if indent2!=indent or not v.line(region):

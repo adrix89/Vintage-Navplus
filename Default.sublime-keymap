@@ -5,6 +5,7 @@
     "command": "move_to_indent",
     "args": {
       "mode": "forward",
+      //   "r_range":"30" , //the range to search for valid lines
     },
     "context": [
       {"key": "setting.command_mode"},
